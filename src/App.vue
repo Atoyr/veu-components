@@ -1,17 +1,17 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <DonutChart></DonutChart>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import DonutChart from './components/DonutChart.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    DonutChart
   }
 }
 </script>
