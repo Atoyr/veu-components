@@ -1,10 +1,12 @@
 <template>
-  <div class="guage" :style="donutChartStyle">
-    <h2>{{donutValue}}{{unit}}</h2>
-    <svg :width="size" :height="size" :viewBox="`0 0 ${donutSize} ${donutSize}`" xmlns="http://www.w3.org/2000/svg">
+  <div class="guage" :style="gaugeStyle">
+    <h2>{{gaugeValue}}{{unit}}</h2>
+    <svg :width="size" :height="size" :viewBox="`0 0 ${gaugeSize} ${gaugeSize}`" xmlns="http://www.w3.org/2000/svg">
      <g>
-      <circle class="guage__background" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeBgColor" fill="none" />
-      <circle class="guage__circle_animation" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeColor" fill="none" />
+      <circle class="guage__background-warning" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth" :stroke="strokeWarningBgColor" :style="gaugeBackgroundStyle" fill="none" />
+      <circle class="guage__background-caution" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth" :stroke="strokeCautionBgColor" :style="gaugeBackgroundStyle" fill="none" />
+      <circle class="guage__background" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth" :stroke="strokeBgColor" :style="gaugeBackgroundStyle" fill="none" />
+      <circle class="guage__circle_animation" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth" :stroke="strokeColor" fill="none" />
      </g>
     </svg>
   </div>
@@ -15,55 +17,63 @@ export default {
   props:{
     value:{
       type: Number,
-      'default':100
+      default: 0
     },
     minValue: {
       type: Number,
-      'default': 0
+      default: 0
     },
     maxValue: {
       type: Number,
-      'default': 100
+      default: 100
+    },
+    cautionValue: {
+      type: Number,
+      default: 101
+    },
+    warningValue: {
+      type: Number,
+      default: 101
     },
     strokeWidth: {
       type: Number,
-      'default': 50
+      default: 50
     },
-    strokeColor: {
-      type: String,
-      'default': '#6fdb6f'
+    strokeColors: {
+      type: Array,
+      default: () => ['#7fff7f','#ffb266','#ff7f7f']
     },
-    strokeBgColor: {
-      type: String,
-      'default': '#dddddd'
+    strokeBgColors: {
+      type: Array,
+      default: () => ['#ccffcc','#ffd8b2','#ffcccc']
     },
     size: {
       type: Number,
-      'default': 500
+      default: 500
     },
     fontSize: {
       type: Number,
-      'default': 128
+      default: 128
     },
     unit: {
       type: String,
-      'default': ''
+      default: ''
     }
   },
   computed:{
     mag() {
       return 452 / (this.size - this.strokeWidth);
     },
-    donutStrokeWidth() {
+    gaugeStrokeWidth() {
       return this.strokeWidth * this.mag;
     },
-    donutSize() {
-      return 452 + this.donutStrokeWidth;
+    gaugeSize() {
+      return 452 + this.gaugeStrokeWidth;
     },
     center() {
-      return this.donutSize / 2;
+      return this.gaugeSize / 2;
     },
-    donutValue() {
+    gaugeValue() {
       if (this.value < this.minValue) {
         return this.minValue;
       }else if (this.maxValue < this.value) {
@@ -71,17 +81,67 @@ export default {
       }
       return this.value;
     },
-    offset() {
-      let percent = this.donutValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100;
-      return 1420 - (947 / 100 * percent);
+    gaugeCautionValue() {
+      if (this.cautionValue < this.minValue) {
+        return this.minValue;
+      }else if (this.maxValue < this.cautionValue) {
+        return this.maxValue;
+      }
+      return this.cautionValue;
     },
-    donutChartStyle() {
+    gaugeWarningValue() {
+      if (this.warningValue < this.minValue) {
+        return this.minValue;
+      }else if (this.maxValue < this.warningValue) {
+        return this.maxValue;
+      }
+      return this.warningValue;
+    },
+    percent() {
+      return this.gaugeValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100;
+    },
+    offset() {
+      return 1420 - (947 / 100 * this.percent);
+    },
+    cautionOffset() {
+      return 1420 - (947 / 100 * this.gaugeCautionValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100);
+    },
+    warningOffset() {
+      return 1420 - (947 / 100 * this.gaugeWarningValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100);
+    },
+    strokeColor() {
+      let v = parseInt(this.value,10)
+      let c = parseInt(this.cautionValue,10)
+      let w = parseInt(this.warningValue,10)
+      if (v < c) {
+        return 0 < this.strokeColors.length ? this.strokeColors[0] : '#7fff7f';
+      }else if (v < w) {
+        return 1 < this.strokeColors.length ? this.strokeColors[1] : '#ffb266';
+      }
+      return 2 < this.strokeColors.length ? this.strokeColors[2] : '#ff7f7f';
+    },
+    strokeBgColor() {
+      return 0 < this.strokeBgColors.length ? this.strokeBgColors[0] : '#ccffcc';
+    },
+    strokeCautionBgColor() {
+      return 1 < this.strokeBgColors.length ? this.strokeBgColors[1] : '#ffd8b2';
+    },
+    strokeWarningBgColor() {
+      return 2 < this.strokeBgColors.length ? this.strokeBgColors[2] : '#ffcccc';
+    },
+    gaugeStyle() {
       return {
         "--offset": this.offset,
         "--line-height": `${this.size}px`,
         "--font-size": `${this.fontSize / this.mag}px`
       }
-    }
+    },
+    gaugeBackgroundStyle() {
+      return {
+        "--caution-offset": this.cautionOffset,
+        "--warning-offset": this.warningOffset,
+      }
+    },
   }, 
   data() {
     return {
@@ -130,6 +190,16 @@ export default {
 }
 
 .guage__background {
+  --caution-offset: 473.3;
+  stroke-dasharray: 1420;
+  stroke-dashoffset: var(--caution-offset)
+}
+.guage__background-caution {
+  --warning-offset: 473.3;
+  stroke-dasharray: 1420;
+  stroke-dashoffset: var(--warning-offset)
+}
+.guage__background-warning {
   stroke-dasharray: 1420;
   stroke-dashoffset: 473.3;
 }
