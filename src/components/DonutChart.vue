@@ -1,10 +1,10 @@
 <template>
   <div class="donut-chart" :style="donutChartStyle">
-    <h2>{{donutValue}}{{Unit}}</h2>
-    <svg :width="Size" :height="Size" :viewBox="`0 0 ${donutSize} ${donutSize}`" xmlns="http://www.w3.org/2000/svg">
+    <h2>{{donutValue}}{{unit}}</h2>
+    <svg :width="size" :height="size" :viewBox="`0 0 ${donutSize} ${donutSize}`" xmlns="http://www.w3.org/2000/svg">
      <g>
-      <circle class="donut-chart__background" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="StrokeBgColor" fill="none"/>
-      <circle class="donut-chart__circle_animation" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="StrokeColor" fill="none"/>
+      <circle class="donut-chart__background" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeBgColor" fill="none"/>
+      <circle class="donut-chart__circle_animation" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeColor" fill="none"/>
      </g>
     </svg>
   </div>
@@ -13,49 +13,49 @@
 <script>
 export default {
   props:{
-    Value:{
+    value:{
       type: Number,
       'default':100
     },
-    MinValue: {
+    minValue: {
       type: Number,
       'default':0
     },
-    MaxValue: {
+    maxValue: {
       type: Number,
       'default':100
     },
-    StrokeWidth: {
+    strokeWidth: {
       type: Number,
       'default':50
     },
-    StrokeColor: {
+    strokeColor: {
       type: String,
       'default': '#6fdb6f'
     },
-    StrokeBgColor: {
+    strokeBgColor: {
       type: String,
       'default': '#dddddd'
     },
-    Size: {
+    size: {
       type: Number,
       'default':500
     },
-    FontSize: {
+    fontSize: {
       type: Number,
       'default':128
     },
-    Unit: {
+    unit: {
       type: String,
       'default': ''
     }
   },
   computed:{
     mag() {
-      return 452 / (this.Size - this.StrokeWidth);
+      return 452 / (this.size - this.strokeWidth);
     },
     donutStrokeWidth() {
-      return this.StrokeWidth * this.mag;
+      return this.strokeWidth * this.mag;
     },
     donutSize() {
       return 452 + this.donutStrokeWidth;
@@ -64,22 +64,22 @@ export default {
       return this.donutSize / 2;
     },
     donutValue() {
-      if (this.Value < this.MinValue) {
-        return this.MinValue;
-      }else if (this.MaxValue < this.Value) {
-        return this.MaxValue;
+      if (this.value < this.minValue) {
+        return this.minValue;
+      }else if (this.maxValue < this.value) {
+        return this.maxValue;
       }
-      return this.Value;
+      return this.value;
     },
     offset() {
-      let percent = this.donutValue / (Math.abs(this.MinValue) + Math.abs(this.MaxValue)) * 100;
+      let percent = this.donutValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100;
       return 1420 - (1420 / 100 * percent);
     },
     donutChartStyle() {
       return {
         "--offset": this.offset,
-        "--line-height": `${this.Size}px`,
-        "--font-size": `${this.FontSize / this.mag}px`
+        "--line-height": `${this.size}px`,
+        "--font-size": `${this.fontSize / this.mag}px`
       }
     }
   }, 

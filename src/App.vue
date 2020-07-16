@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <DonutChart Size=220 StrokeWidth=20 :Value="v" ></DonutChart>
+    <DonutChart size=220 stroke-width=20 :value="v" ></DonutChart>
   </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      v:100
+      v:80
     }
   }
 }
