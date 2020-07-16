@@ -1,10 +1,10 @@
 <template>
-  <div class="donut-chart" :style="donutChartStyle">
+  <div class="guage" :style="donutChartStyle">
     <h2>{{donutValue}}{{unit}}</h2>
     <svg :width="size" :height="size" :viewBox="`0 0 ${donutSize} ${donutSize}`" xmlns="http://www.w3.org/2000/svg">
      <g>
-      <circle class="donut-chart__background" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeBgColor" fill="none" />
-      <circle class="donut-chart__circle_animation" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeColor" fill="none" />
+      <circle class="guage__background" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeBgColor" fill="none" />
+      <circle class="guage__circle_animation" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeColor" fill="none" />
      </g>
     </svg>
   </div>
@@ -19,15 +19,15 @@ export default {
     },
     minValue: {
       type: Number,
-      'default':0
+      'default': 0
     },
     maxValue: {
       type: Number,
-      'default':100
+      'default': 100
     },
     strokeWidth: {
       type: Number,
-      'default':50
+      'default': 50
     },
     strokeColor: {
       type: String,
@@ -39,11 +39,11 @@ export default {
     },
     size: {
       type: Number,
-      'default':500
+      'default': 500
     },
     fontSize: {
       type: Number,
-      'default':128
+      'default': 128
     },
     unit: {
       type: String,
@@ -73,7 +73,7 @@ export default {
     },
     offset() {
       let percent = this.donutValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100;
-      return 1420 - (1420 / 100 * percent);
+      return 1420 - (947 / 100 * percent);
     },
     donutChartStyle() {
       return {
@@ -93,14 +93,14 @@ export default {
 
 <style lang="scss">
 @mixin animation-keyframes($dashoffset:0) {
-  @keyframes donut-chart {
+  @keyframes guage {
     to {
       stroke-dashoffset: $dashoffset;
     }
   }
 }
 
-.donut-chart {
+.guage {
   --offset: 0;
   --line-height: 500px;
   --font-size: 128;
@@ -119,14 +119,20 @@ export default {
     }
   }
   svg {
-      transform: rotate(-90deg);
+      transform: rotate(150deg);
   }
 }
 
-.donut-chart__circle_animation {
+.guage__circle_animation {
   stroke-dasharray: 1420;
   stroke-dashoffset: 1420;
-  animation: donut-chart 1s ease-out forwards;
+  animation: guage 1s ease-out forwards;
+}
+
+.guage__background {
+  stroke-dasharray: 1420;
+  stroke-dashoffset: 473.3;
 }
 
 </style>
+
