@@ -2,12 +2,14 @@
   <div id="app">
     <DonutChart class="m-1" size=220 stroke-width=20 :value="v"></DonutChart>
     <Gauge class="m-1" size=220 stroke-width=50 :value="v" :caution-value="c" :warning-value="w"></Gauge>
-    <p>Value {{v}}</p>
-    <input class="m-1" type="range" min=0 max=100 step=1 v-model="v"></input>
-    <p>Caution {{c}}</p>
-    <input class="m-1" type="range" min=0 max=101 step=1 v-model="c"></input>
-    <p>Warning {{w}}</p>
-    <input class="m-1" type="range" min=0 max=101 step=1 v-model="w"></input>
+    <div>
+      <p class="m-1">Value {{v}}</p>
+      <input class="m-1" type="range" min=0 max=100 step=1 v-model="v"></input>
+      <p class="m-1">Caution {{c}}</p>
+      <input class="m-1" type="range" min=0 max=101 step=1 v-model="c"></input>
+      <p class="m-1">Warning {{w}}</p>
+      <input class="m-1" type="range" min=0 max=101 step=1 v-model="w"></input>
+    </div>
   </div>
 </template>
 
@@ -33,6 +35,6 @@ export default {
 
 <style>
 .m-1 {
-  margin: 0.25rem;
+  margin: 0.2rem;
 }
 </style>
