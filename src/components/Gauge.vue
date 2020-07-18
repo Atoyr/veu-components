@@ -133,6 +133,7 @@ export default {
       return {
         "--offset": this.offset,
         "--line-height": `${this.size * 0.75}px`,
+        "--width": `${this.size}px`,
         "--font-padding": `${64 / this.mag}px`,
         "--font-size": `${this.fontSize / this.mag}px`
       }
@@ -163,7 +164,8 @@ export default {
 
 .guage {
   --offset: 0;
-  --line-height: 500px;
+  --line-height: 375px;
+  --width: 500px;
   --font-size: 128px;
   --font-padding: 64px;
   position: relative;
@@ -175,7 +177,7 @@ export default {
     padding-top: var(--font-padding);
     line-height: var(--line-height);
     margin: 0;
-    width: 100%;
+    width: var(--width);
     font: {
       size: var(--font-size);
       family: Meiryo;

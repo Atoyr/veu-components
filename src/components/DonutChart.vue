@@ -79,6 +79,7 @@ export default {
       return {
         "--offset": this.offset,
         "--line-height": `${this.size}px`,
+        "--width": `${this.size}px`,
         "--font-size": `${this.fontSize / this.mag}px`
       }
     }
@@ -103,6 +104,7 @@ export default {
 .donut-chart {
   --offset: 0;
   --line-height: 500px;
+  --width: 500px;
   --font-size: 128;
   position: relative;
   float: left;
@@ -112,7 +114,7 @@ export default {
     position: absolute;
     line-height: var(--line-height);
     margin: 0;
-    width: 100%;
+    width: var(--width);
     font: {
       size: var(--font-size);
       family: Meiryo;
