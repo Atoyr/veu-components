@@ -3,8 +3,8 @@
     <h2>{{gaugeValue}}{{unit}}</h2>
     <svg :width="size" :height="size * 0.75" :viewBox="`0 0 ${gaugeSize} ${gaugeSize * 0.75}`" xmlns="http://www.w3.org/2000/svg">
       <g :transform="`rotate(150,${center},${center})`">
-      <circle class="guage__background-warning" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth" :stroke="strokeWarningBgColor" :style="gaugeBackgroundStyle" fill="none" />
-      <circle class="guage__background-caution" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth" :stroke="strokeCautionBgColor" :style="gaugeBackgroundStyle" fill="none" />
+      <circle class="guage__background-warning" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth - 4" :stroke="strokeWarningBgColor" :style="gaugeBackgroundStyle" fill="none" />
+      <circle class="guage__background-caution" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth - 2" :stroke="strokeCautionBgColor" :style="gaugeBackgroundStyle" fill="none" />
       <circle class="guage__background" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth" :stroke="strokeBgColor" :style="gaugeBackgroundStyle" fill="none" />
       <circle class="guage__circle_animation" r="226" :cy="center" :cx="center" :stroke-width="this.gaugeStrokeWidth" :stroke="strokeColor" fill="none" />
      </g>
