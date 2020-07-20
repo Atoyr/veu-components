@@ -68,6 +68,25 @@
           </div>
         </div>
       </section>
+      <section class="card">
+        <h2 class="card__title">データバー(1値)</h2>
+        <div class="wrapper-row">
+          <DataBar class="m-1" 
+                   width=220
+                   height=32
+                   :value="v"
+                   :color="dataBarColor"
+                   :bg-color="dataBarBgColor"></DataBar>
+          <div class="card__items">
+            <p class="m-1">value {{v}}</p>
+            <input class="m-1" type="range" min=0 max=100 step=1 v-model="v"></input>
+            <p class="m-1">color {{dataBarColor}}</p>
+            <input class="m-1" type="color" v-model="dataBarColor"></input>
+            <p class="m-1">bg-color {{dataBarBgColor}}</p>
+            <input class="m-1" type="color" v-model="dataBarBgColor"></input>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -75,12 +94,14 @@
 <script>
 import DonutChart from './components/DonutChart.vue'
 import Gauge from './components/Gauge.vue'
+import DataBar from './components/DataBar.vue'
 
 export default {
   name: 'App',
   components: {
     DonutChart,
-    Gauge
+    Gauge,
+    DataBar
   },
   data() {
     return {
@@ -93,6 +114,8 @@ export default {
       gaugeStrokeWidth: 50,
       gaugeColors: ['#7fff7f','#ffb266','#ff7f7f'],
       gaugeBgColors: ['#ccffcc','#ffd8b2','#ffcccc'],
+      dataBarColor: "#6fdb6f",
+      dataBarBgColor: "#dddddd",
     }
   }
 }
