@@ -4,8 +4,8 @@
       <div>
         <h1>my Vue.js components🎉</h1>
       </div> 
-      <div>
-        <h2>ドーナツグラフ(1値)</h2>
+      <section class="card">
+        <h2 class="card__title">ドーナツグラフ(1値)</h2>
         <div class="wrapper-row">
           <DonutChart class="m-1" 
             size=220 
@@ -13,22 +13,22 @@
             :value="v"
             :stroke-color="donutChartColor"
             :stroke-bg-color="donutChartBgColor"></DonutChart>
-          <div class="mx-1">
+          <div class="card__items">
             <p class="m-1">value {{v}}</p>
             <input class="m-1" type="range" min=0 max=100 step=1 v-model="v"></input>
             <p class="m-1">stroke-width {{donutChartStrokeWidth}}</p>
             <input class="m-1" type="range" min=0 max=110 step=1 v-model="donutChartStrokeWidth"></input>
           </div>
-          <div class="mx-1">
+          <div class="card__items">
             <p class="m-1">stroke-color {{donutChartColor}}</p>
             <input class="m-1" type="color" v-model="donutChartColor"></input>
             <p class="m-1">stroke-bg-color {{donutChartBgColor}}</p>
             <input class="m-1" type="color" v-model="donutChartBgColor"></input>
           </div>
         </div>
-      </div>
-      <div>
-        <h2>ゲージ</h2>
+      </section>
+      <section class="card">
+        <h2 class="card__title">ゲージ</h2>
         <div class="wrapper-row">
           <Gauge class="m-1" 
                  size=220 
@@ -38,7 +38,7 @@
                  :warning-value="w"
                  :stroke-colors="gaugeColors"
                  :stroke-bg-colors="gaugeBgColors" ></Gauge>
-          <div class="mx-1">
+          <div class="card__items">
             <p class="m-1">value {{v}}</p>
             <input class="m-1" type="range" min=0 max=100 step=1 v-model="v"></input>
             <p class="m-1">caution-value {{c}}</p>
@@ -48,7 +48,7 @@
             <p class="m-1">stroke-width {{gaugeStrokeWidth}}</p>
             <input class="m-1" type="range" min=0 max=110 step=1 v-model="gaugeStrokeWidth"></input>
           </div>
-          <div class="mx-1">
+          <div class="card__items">
             <p class="m-1">stroke-colors</p>
             <p class="m-1">stroke-colors[0] (normal color) {{gaugeColors[0]}}</p>
             <input class="m-1" type="color" v-model="gaugeColors[0]"></input>
@@ -57,7 +57,7 @@
             <p class="m-1">stroke-colors[2] (warning color) {{gaugeColors[2]}}</p>
             <input class="m-1" type="color" v-model="gaugeColors[2]"></input>
           </div>
-          <div class="mx-1">
+          <div class="card__items">
             <p class="m-1">stroke-bg-colors</p>
             <p class="m-1">stroke-bg-colors[0] (normal color) {{gaugeBgColors[0]}}</p>
             <input class="m-1" type="color" v-model="gaugeBgColors[0]"></input>
@@ -67,7 +67,7 @@
             <input class="m-1" type="color" v-model="gaugeBgColors[2]"></input>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   </div>
 </template>
@@ -99,6 +99,15 @@ export default {
 </script>
 
 <style lang="scss">
+* {
+  margin: 0;
+  padding: 0;
+}
+#app {
+  background: #f2f4ff;
+  padding: 1rem;
+}
+
 .wrapper-column {
   display: flex;
   flex-direction: column;
@@ -106,6 +115,41 @@ export default {
 .wrapper-row {
   display: flex;
   flex-direction: row;
+}
+
+.card {
+  width: auto;
+  margin: 1rem;
+  padding: 1rem;
+  background: #f2f4ff;
+  border-radius: 5px;
+  box-shadow: -2px -2px 5px rgba(255, 255, 255, 1),
+                3px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card__title {
+  font-size: 2rem;
+  margin: {
+    bottom: 1rem;
+  }
+}
+
+.card__items {
+  font-size: 1rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #f2f4ff;
+  border-radius: 5px;
+  box-shadow: -6px -6px 14px rgba(255, 255, 255, .7),
+                -6px -6px 10px rgba(255, 255, 255, .5),
+                6px 6px 8px rgba(255, 255, 255, .075),
+                6px 6px 10px rgba(0, 0, 0, .15);
+}
+.card__items:hover {
+  box-shadow: -2px -2px 6px rgba(255, 255, 255, .6),
+              -2px -2px 4px rgba(255, 255, 255, .4),
+              2px 2px 2px rgba(255, 255, 255, .05),
+              2px 2px 4px rgba(0, 0, 0, .1);
 }
 
 .m-1 {
