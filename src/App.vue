@@ -9,8 +9,8 @@
         <div class="wrapper-row">
           <DonutChart class="m-1" 
             size=220 
-            :stroke-width="donutChartsiStrokeWidth" 
-            :value="v" 
+            :stroke-width="donutChartStrokeWidth" 
+            :value="v"
             :stroke-color="donutChartColor"
             :stroke-bg-color="donutChartBgColor"></DonutChart>
           <div class="mx-1">
