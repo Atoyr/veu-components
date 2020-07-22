@@ -1,12 +1,14 @@
 <template>
   <div class="donut-chart" :style="donutChartStyle">
-    <h2>{{donutValue}}{{unit}}</h2>
     <svg :width="size" :height="size" :viewBox="`0 0 ${donutSize} ${donutSize}`" xmlns="http://www.w3.org/2000/svg">
       <g :transform="`rotate(-90,${center},${center})`">
         <circle class="donut-chart__background" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth - 3" :stroke="strokeBgColor" fill="none" />
       </g>
       <g :transform="`rotate(-90,${center},${center})`">
         <circle class="donut-chart__circle_animation" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeColor" fill="none" />
+     </g>
+     <g>
+       <text :x="center" :y="center + 40" text-anchor="middle" stroke-width="1" font-size="128" font-family="Meiryo">{{donutValue}}</text>
      </g>
     </svg>
   </div>
