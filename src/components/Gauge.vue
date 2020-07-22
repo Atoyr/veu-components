@@ -76,28 +76,37 @@ export default {
       return this.gaugeSize / 2;
     },
     gaugeValue() {
-      if (this.value < this.minValue) {
-        return this.minValue;
-      }else if (this.maxValue < this.value) {
-        return this.maxValue;
+      let v = parseInt(this.value,10)
+      let min = parseInt(this.minValue,10)
+      let max = parseInt(this.maxValue,10)
+      if (v < min) {
+        return min;
+      }else if (max < v) {
+        return max;
       }
-      return this.value;
+      return v;
     },
     gaugeCautionValue() {
-      if (this.cautionValue < this.minValue) {
-        return this.minValue;
-      }else if (this.maxValue < this.cautionValue) {
-        return this.maxValue;
+      let c = parseInt(this.cautionValue,10)
+      let min = parseInt(this.minValue,10)
+      let max = parseInt(this.maxValue,10)
+      if (c < min) {
+        return min;
+      }else if (max < c) {
+        return max;
       }
-      return this.cautionValue;
+      return c;
     },
     gaugeWarningValue() {
-      if (this.warningValue < this.minValue) {
-        return this.minValue;
-      }else if (this.maxValue < this.warningValue) {
-        return this.maxValue;
+      let w = parseInt(this.warningValue,10)
+      let min = parseInt(this.minValue,10)
+      let max = parseInt(this.maxValue,10)
+      if (w < min) {
+        return min;
+      }else if (max < w) {
+        return max;
       }
-      return this.warningValue;
+      return w;
     },
     percent() {
       return this.gaugeValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100;

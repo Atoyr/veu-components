@@ -5,17 +5,29 @@
         <h1>my Vue.js components🎉</h1>
       </div> 
       <section class="card">
+        <h2 class="card__title">パラメータ</h2>
+        <div class="card__item">
+            <p class="m-1">min-value</p>
+            <input class="m-1" type="number" v-model="minValue"></input>
+            <p class="m-1">max-value</p>
+            <input class="m-1" type="number" v-model="maxValue"></input>
+        </div>
+      </section>
+      <section class="card">
         <h2 class="card__title">ドーナツグラフ(1値)</h2>
         <div class="wrapper-row">
-          <DonutChart class="m-1" 
-            size=220 
-            :stroke-width="donutChartStrokeWidth" 
-            :value="v"
-            :stroke-color="donutChartColor"
-            :stroke-bg-color="donutChartBgColor"></DonutChart>
+          <DonutChart 
+             class="m-1" 
+             size=220 
+             :min-value="minValue"
+             :max-value="maxValue"
+             :stroke-width="donutChartStrokeWidth" 
+             :value="v"
+             :stroke-color="donutChartColor"
+             :stroke-bg-color="donutChartBgColor"></DonutChart>
           <div class="card__items">
             <p class="m-1">value {{v}}</p>
-            <input class="m-1" type="range" min=0 max=100 step=1 v-model="v"></input>
+            <input class="m-1" type="range" :min="minValue" :max="maxValue" step=1 v-model="v"></input>
             <p class="m-1">stroke-width {{donutChartStrokeWidth}}</p>
             <input class="m-1" type="range" min=0 max=110 step=1 v-model="donutChartStrokeWidth"></input>
           </div>
@@ -30,40 +42,43 @@
       <section class="card">
         <h2 class="card__title">ゲージ</h2>
         <div class="wrapper-row">
-          <Gauge class="m-1" 
-                 size=220 
-                 :stroke-width="gaugeStrokeWidth" 
-                 :value="v" 
-                 :caution-value="c" 
-                 :warning-value="w"
-                 :stroke-colors="gaugeColors"
-                 :stroke-bg-colors="gaugeBgColors" ></Gauge>
+          <Gauge 
+             class="m-1" 
+             size=220 
+             :min-value="minValue"
+             :max-value="maxValue"
+             :stroke-width="gaugeStrokeWidth" 
+             :value="v" 
+             :caution-value="c" 
+             :warning-value="w"
+             :stroke-colors="gaugeColors"
+             :stroke-bg-colors="gaugeBgColors" ></Gauge>
           <div class="card__items">
             <p class="m-1">value {{v}}</p>
-            <input class="m-1" type="range" min=0 max=100 step=1 v-model="v"></input>
+            <input class="m-1" type="range" :min="minValue" :max="maxValue" step=1 v-model="v"></input>
             <p class="m-1">caution-value {{c}}</p>
-            <input class="m-1" type="range" min=0 max=101 step=1 v-model="c"></input>
+            <input class="m-1" type="range" :min="minValue" :max="parseInt(maxValue,10) + 1" step=1 v-model="c"></input>
             <p class="m-1">warning-value {{w}}</p>
-            <input class="m-1" type="range" min=0 max=101 step=1 v-model="w"></input>
+            <input class="m-1" type="range" :min="minValue" :max="parseInt(maxValue,10) + 1" step=1 v-model="w"></input>
             <p class="m-1">stroke-width {{gaugeStrokeWidth}}</p>
             <input class="m-1" type="range" min=0 max=110 step=1 v-model="gaugeStrokeWidth"></input>
           </div>
           <div class="card__items">
             <p class="m-1">stroke-colors</p>
-            <p class="m-1">stroke-colors[0] (normal color) {{gaugeColors[0]}}</p>
+            <p class="m-1">[0] (normal color) {{gaugeColors[0]}}</p>
             <input class="m-1" type="color" v-model="gaugeColors[0]"></input>
-            <p class="m-1">stroke-colors[1] (caution color) {{gaugeColors[1]}}</p>
+            <p class="m-1">[1] (caution color) {{gaugeColors[1]}}</p>
             <input class="m-1" type="color" v-model="gaugeColors[1]"></input>
-            <p class="m-1">stroke-colors[2] (warning color) {{gaugeColors[2]}}</p>
+            <p class="m-1">[2] (warning color) {{gaugeColors[2]}}</p>
             <input class="m-1" type="color" v-model="gaugeColors[2]"></input>
           </div>
           <div class="card__items">
             <p class="m-1">stroke-bg-colors</p>
-            <p class="m-1">stroke-bg-colors[0] (normal color) {{gaugeBgColors[0]}}</p>
+            <p class="m-1">[0] (normal color) {{gaugeBgColors[0]}}</p>
             <input class="m-1" type="color" v-model="gaugeBgColors[0]"></input>
-            <p class="m-1">stroke-bg-colors[1] (caution color) {{gaugeBgColors[1]}}</p>
+            <p class="m-1">[1] (caution color) {{gaugeBgColors[1]}}</p>
             <input class="m-1" type="color" v-model="gaugeBgColors[1]"></input>
-            <p class="m-1">stroke-bg-colors[2] (warning color) {{gaugeBgColors[2]}}</p>
+            <p class="m-1">[2] (warning color) {{gaugeBgColors[2]}}</p>
             <input class="m-1" type="color" v-model="gaugeBgColors[2]"></input>
           </div>
         </div>
@@ -71,15 +86,21 @@
       <section class="card">
         <h2 class="card__title">データバー(1値)</h2>
         <div class="wrapper-row">
-          <DataBar class="m-1" 
-                   width=220
-                   height=32
-                   :value="v"
-                   :color="dataBarColor"
-                   :bg-color="dataBarBgColor"></DataBar>
+          <DataBar 
+             ref="databar"
+             class="m-1" 
+             width=220
+             height=32
+             isDrumRoll
+             :min-value="minValue"
+             :max-value="maxValue"
+             :value="v"
+             :color="dataBarColor"
+             :bg-color="dataBarBgColor"></DataBar>
           <div class="card__items">
+            <button @click="dataBarAnimation">アニメーション</button>
             <p class="m-1">value {{v}}</p>
-            <input class="m-1" type="range" min=0 max=100 step=1 v-model="v"></input>
+            <input class="m-1" type="range" :min="minValue" :max="maxValue" step=1 v-model="v"></input>
             <p class="m-1">color {{dataBarColor}}</p>
             <input class="m-1" type="color" v-model="dataBarColor"></input>
             <p class="m-1">bg-color {{dataBarBgColor}}</p>
@@ -105,6 +126,8 @@ export default {
   },
   data() {
     return {
+      minValue:0,
+      maxValue:100,
       v: 80,
       c: 101,
       w: 101,
@@ -116,6 +139,11 @@ export default {
       gaugeBgColors: ['#ccffcc','#ffd8b2','#ffcccc'],
       dataBarColor: "#6fdb6f",
       dataBarBgColor: "#dddddd",
+    }
+  },
+  methods: {
+    dataBarAnimation() {
+      this.$refs.databar.startAnimate();
     }
   }
 }

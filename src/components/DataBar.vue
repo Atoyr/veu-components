@@ -75,6 +75,7 @@ export default {
   methods: {
     startAnimate: function() {
       this.isAnimating = true;
+      this.speedEaseoutPercent = 0;
       this.animate();
     },
     animate: function() {
