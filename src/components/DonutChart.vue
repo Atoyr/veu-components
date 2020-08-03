@@ -1,14 +1,42 @@
 <template>
   <div class="donut-chart" :style="donutChartStyle">
-    <svg :width="size" :height="size" :viewBox="`0 0 ${donutSize} ${donutSize}`" xmlns="http://www.w3.org/2000/svg">
-      <g :transform="`rotate(-90,${center},${center})`">
-        <circle class="donut-chart__background" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth - 3" :stroke="strokeBgColor" fill="none" />
+    <svg 
+      :width="size" 
+      :height="size" 
+      :viewBox="`0 0 ${donutSize} ${donutSize}`" 
+      xmlns="http://www.w3.org/2000/svg">
+      <g 
+        :transform="`rotate(-90,${center},${center})`">
+        <circle 
+          r="226" 
+          :cx="center" 
+          :cy="center" 
+          :stroke-width="this.donutStrokeWidth - 3" 
+          :stroke="strokeBgColor" 
+          fill="none" />
       </g>
-      <g :transform="`rotate(-90,${center},${center})`">
-        <circle class="donut-chart__circle_animation" r="226" :cy="center" :cx="center" :stroke-width="this.donutStrokeWidth" :stroke="strokeColor" fill="none" />
+      <g 
+        :transform="`rotate(-90,${center},${center})`">
+        <circle 
+          r="226" 
+          :cx="center" 
+          :cy="center" 
+          :stroke-width="this.donutStrokeWidth" 
+          :stroke="strokeColor" 
+          :stroke-dasharray="1420"
+          :stroke-dashoffset="offset"
+          fill="none" />
      </g>
      <g>
-       <text :x="center" :y="center + 40" text-anchor="middle" stroke-width="1" font-size="128" font-family="Meiryo">{{donutValue}}</text>
+       <text 
+        :x="center" 
+        :y="center + 40" 
+        text-anchor="middle" 
+        stroke-width="1" 
+        font-size="128" 
+        font-family="Meiryo">
+         {{visualValue}}
+       </text>
      </g>
     </svg>
   </div>
@@ -52,6 +80,10 @@ export default {
     unit: {
       type: String,
       'default': ''
+    },
+    isDrumRoll: {
+      type: Boolean,
+      default: false
     }
   },
   computed:{
@@ -75,61 +107,60 @@ export default {
       }
       return this.value;
     },
+    percent() {
+      return (this.minValue + this.donutValue) / (Math.abs(this.minValue) + Math.abs(this.maxValue));
+    },
+    visualPercent() {
+      return this.isAnimating ? this.speedEaseoutPercent : this.percent;
+    },
+    visualValue() {
+      return parseInt((this.isDrumRoll ? this.visualPercent : this.percent) * (Math.abs(this.minValue) + Math.abs(this.maxValue)));
+    },
     offset() {
-      let percent = this.donutValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100;
-      return 1420 - (1420 / 100 * percent);
+      return 1420 - (1420 * this.visualPercent);
     },
     donutChartStyle() {
       return {
         "--offset": this.offset,
         "--line-height": `${this.size}px`,
         "--width": `${this.size}px`,
-        "--font-size": `${this.fontSize / this.mag}px`
       }
     }
   }, 
+  mounted() {
+    this.startAnimate();
+  },
+  methods: {
+    startAnimate: function() {
+      this.isAnimating = true;
+      this.speedEaseoutPercent = 0;
+      this.animate();
+    },
+    animate: function() {
+      if (this.isAnimating) {
+        this.speedEaseoutPercent += (this.percent - this.speedEaseoutPercent) * 0.1; //フレーム更新毎に加算
+         
+        if(this.speedEaseoutPercent > this.percent - this.percent * 0.005){
+          this.isAnimating = false;
+        }else {
+          this.animation = requestAnimationFrame(this.animate);
+        }
+      }
+    }
+  },
   data() {
     return {
-
+      animation: {},
+      isAnimating: false,
+      speedEaseoutPercent: 0,
     }
   }
 }
 </script>
 
 <style lang="scss">
-@mixin animation-keyframes($dashoffset:0) {
-  @keyframes donut-chart {
-    to {
-      stroke-dashoffset: $dashoffset;
-    }
-  }
-}
-
 .donut-chart {
-  --offset: 0;
-  --line-height: 500px;
-  --width: 500px;
-  --font-size: 128;
   position: relative;
   float: left;
-  @include animation-keyframes(var(--offset))
-  h2 {
-    text-align:center;
-    position: absolute;
-    line-height: var(--line-height);
-    margin: 0;
-    width: var(--width);
-    font: {
-      size: var(--font-size);
-      family: Meiryo;
-    }
-  }
 }
-
-.donut-chart__circle_animation {
-  stroke-dasharray: 1420;
-  stroke-dashoffset: 1420;
-  animation: donut-chart 1s ease-out forwards;
-}
-
 </style>

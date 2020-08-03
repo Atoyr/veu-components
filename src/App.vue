@@ -17,15 +17,19 @@
         <h2 class="card__title">ドーナツグラフ(1値)</h2>
         <div class="wrapper-row">
           <DonutChart 
+             ref="donutchart"
              class="m-1" 
              size=220 
+             is-drum-roll
              :min-value="minValue"
              :max-value="maxValue"
              :stroke-width="donutChartStrokeWidth" 
              :value="v"
              :stroke-color="donutChartColor"
-             :stroke-bg-color="donutChartBgColor"></DonutChart>
+             :stroke-bg-color="donutChartBgColor"
+             ></DonutChart>
           <div class="card__items">
+            <button @click="donutChartAnimation">アニメーション</button>
             <p class="m-1">value {{v}}</p>
             <input class="m-1" type="range" :min="minValue" :max="maxValue" step=1 v-model="v"></input>
             <p class="m-1">stroke-width {{donutChartStrokeWidth}}</p>
@@ -91,7 +95,7 @@
              class="m-1" 
              width=220
              height=32
-             isDrumRoll
+             is-drum-roll
              :min-value="minValue"
              :max-value="maxValue"
              :value="v"
@@ -142,6 +146,9 @@ export default {
     }
   },
   methods: {
+    donutChartAnimation() {
+      this.$refs.donutchart.startAnimate();
+    },
     dataBarAnimation() {
       this.$refs.databar.startAnimate();
     }
