@@ -155,16 +155,16 @@ export default {
       return w;
     },
     percent() {
-      return this.gaugeValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100;
+      return (this.gaugeValue - this.minValue) / Math.abs(this.maxValue - this.minValue) * 100;
     },
     offset() {
       return 1420 - (947 / 100 * this.percent);
     },
     cautionOffset() {
-      return 1420 - (947 / 100 * this.gaugeCautionValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100);
+      return 1420 - (947 * (this.gaugeCautionValue - this.minValue) / Math.abs(this.maxValue - this.minValue));
     },
     warningOffset() {
-      return 1420 - (947 / 100 * this.gaugeWarningValue / (Math.abs(this.minValue) + Math.abs(this.maxValue)) * 100);
+      return 1420 - (947 * (this.gaugeWarningValue - this.minValue) / Math.abs(this.maxValue - this.minValue) );
     },
     strokeColor() {
       let v = parseInt(this.value,10)

@@ -51,13 +51,18 @@ export default {
   },
   computed:{
     percent() {
-      return this.value / (Math.abs(this.minValue) + Math.abs(this.maxValue));
+      let v = parseInt(this.value,10)
+      let min = parseInt(this.minValue,10)
+      let max = parseInt(this.maxValue,10)
+      return (v - min) / Math.abs(max - min);
     },
     visualPercent() {
       return this.isAnimating ? this.speedEaseoutPercent : this.percent;
     },
     visualValue() {
-      return parseInt((this.isDrumRoll ? this.visualPercent : this.percent) * (Math.abs(this.minValue) + Math.abs(this.maxValue)));
+      let min = parseInt(this.minValue,10)
+      let max = parseInt(this.maxValue,10)
+      return min + parseInt((this.isDrumRoll ? this.visualPercent : this.percent) * (max - min));
     },
     barWidth() {
       return this.visualPercent * this.width;

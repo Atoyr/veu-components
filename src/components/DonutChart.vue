@@ -100,21 +100,24 @@ export default {
       return this.donutSize / 2;
     },
     donutValue() {
-      if (this.value < this.minValue) {
-        return this.minValue;
-      }else if (this.maxValue < this.value) {
-        return this.maxValue;
+      let v = parseInt(this.value,10)
+      let min = parseInt(this.minValue,10)
+      let max = parseInt(this.maxValue,10)
+      if (v < min){
+        return this.min;
+      }else if (max < v) {
+        return max;
       }
-      return this.value;
+      return v;
     },
     percent() {
-      return (this.minValue + this.donutValue) / (Math.abs(this.minValue) + Math.abs(this.maxValue));
+      return (this.donutValue - this.minValue) / (Math.abs(this.maxValue - this.minValue));
     },
     visualPercent() {
       return this.isAnimating ? this.speedEaseoutPercent : this.percent;
     },
     visualValue() {
-      return parseInt((this.isDrumRoll ? this.visualPercent : this.percent) * (Math.abs(this.minValue) + Math.abs(this.maxValue)));
+      return parseInt((this.isDrumRoll ? this.visualPercent : this.percent) * (Math.abs(this.maxValue - this.minValue )));
     },
     offset() {
       return 1420 - (1420 * this.visualPercent);
