@@ -1,7 +1,6 @@
 <template>
   <div 
-    class="guage" 
-    :style="gaugeStyle">
+    class="guage">
     <svg 
       :width="size" 
       :height="size * 0.75" 
@@ -16,7 +15,8 @@
         :cx="center" 
         :stroke-width="this.gaugeStrokeWidth - 4" 
         :stroke="strokeWarningBgColor" 
-        :style="gaugeBackgroundStyle" 
+        stroke-dasharray="1420"
+        stroke-dashoffset="473.3"
         fill="none" />
       <circle 
         class="guage__background-caution" 
@@ -25,7 +25,8 @@
         :cx="center" 
         :stroke-width="this.gaugeStrokeWidth - 2" 
         :stroke="strokeCautionBgColor" 
-        :style="gaugeBackgroundStyle" 
+        stroke-dasharray="1420"
+        :stroke-dashoffset="warningOffset"
         fill="none" />
       <circle 
         class="guage__background" 
@@ -34,15 +35,17 @@
         :cx="center" 
         :stroke-width="this.gaugeStrokeWidth" 
         :stroke="strokeBgColor" 
-        :style="gaugeBackgroundStyle" 
+        stroke-dasharray="1420"
+        :stroke-dashoffset="cautionOffset"
         fill="none" />
       <circle 
-        class="guage__circle_animation" 
         r="226" 
         :cy="center" 
         :cx="center" 
         :stroke-width="this.gaugeStrokeWidth" 
         :stroke="strokeColor" 
+        stroke-dasharray="1420"
+        :stroke-dashoffset="offset"
         fill="none" />
      </g>
      <g>
@@ -53,7 +56,7 @@
         stroke-width="1" 
         font-size="128" 
         font-family="Meiryo">
-         {{gaugeValue}}
+         {{visualValue}}
        </text>
      </g>
     </svg>
@@ -155,10 +158,18 @@ export default {
       return w;
     },
     percent() {
-      return (this.gaugeValue - this.minValue) / Math.abs(this.maxValue - this.minValue) * 100;
+      return (this.gaugeValue - this.minValue) / Math.abs(this.maxValue - this.minValue);
+    },
+    visualPercent() {
+      return this.isAnimating ? this.speedEaseoutPercent : this.percent;
+    },
+    visualValue() {
+      let min = parseInt(this.minValue,10)
+      let max = parseInt(this.maxValue,10)
+      return min + parseInt((this.isDrumRoll ? this.visualPercent : this.percent) * (max - min));
     },
     offset() {
-      return 1420 - (947 / 100 * this.percent);
+      return 1420 - (947 * this.visualPercent);
     },
     cautionOffset() {
       return 1420 - (947 * (this.gaugeCautionValue - this.minValue) / Math.abs(this.maxValue - this.minValue));
@@ -186,81 +197,42 @@ export default {
     strokeWarningBgColor() {
       return 2 < this.strokeBgColors.length ? this.strokeBgColors[2] : '#ffcccc';
     },
-    gaugeStyle() {
-      return {
-        "--offset": this.offset,
-        "--line-height": `${this.size * 0.75}px`,
-        "--width": `${this.size}px`,
-        "--font-padding": `${64 / this.mag}px`,
-        "--font-size": `${this.fontSize / this.mag}px`
-      }
-    },
-    gaugeBackgroundStyle() {
-      return {
-        "--caution-offset": this.cautionOffset,
-        "--warning-offset": this.warningOffset,
-      }
-    },
   }, 
+  mounted() {
+    this.startAnimate();
+  },
+  methods: {
+    startAnimate: function() {
+      this.isAnimating = true;
+      this.speedEaseoutPercent = 0;
+      this.animate();
+    },
+    animate: function() {
+      if (this.isAnimating) {
+        this.speedEaseoutPercent += (this.percent - this.speedEaseoutPercent) * 0.1; //フレーム更新毎に加算
+         
+        if(this.speedEaseoutPercent > this.percent - this.percent * 0.005){
+          this.isAnimating = false;
+        }else {
+          this.animation = requestAnimationFrame(this.animate);
+        }
+      }
+    }
+  },
   data() {
     return {
-
+      animation: {},
+      isAnimating: false,
+      speedEaseoutPercent: 0,
     }
   }
 }
 </script>
 
 <style lang="scss">
-@mixin animation-keyframes($dashoffset:0) {
-  @keyframes guage {
-    to {
-      stroke-dashoffset: $dashoffset;
-    }
-  }
-}
-
 .guage {
-  --offset: 0;
-  --line-height: 375px;
-  --width: 500px;
-  --font-size: 128px;
-  --font-padding: 64px;
   position: relative;
   float: left;
-  @include animation-keyframes(var(--offset))
-  h2 {
-    text-align:center;
-    position: absolute;
-    padding-top: var(--font-padding);
-    line-height: var(--line-height);
-    margin: 0;
-    width: var(--width);
-    font: {
-      size: var(--font-size);
-      family: Meiryo;
-    }
-  }
-}
-
-.guage__circle_animation {
-  stroke-dasharray: 1420;
-  stroke-dashoffset: 1420;
-  animation: guage 1s ease-out forwards;
-}
-
-.guage__background {
-  --caution-offset: 473.3;
-  stroke-dasharray: 1420;
-  stroke-dashoffset: var(--caution-offset)
-}
-.guage__background-caution {
-  --warning-offset: 473.3;
-  stroke-dasharray: 1420;
-  stroke-dashoffset: var(--warning-offset)
-}
-.guage__background-warning {
-  stroke-dasharray: 1420;
-  stroke-dashoffset: 473.3;
 }
 
 </style>

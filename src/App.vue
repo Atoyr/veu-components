@@ -49,6 +49,7 @@
           <Gauge 
              class="m-1" 
              size=220 
+             ref="gauge"
              :min-value="minValue"
              :max-value="maxValue"
              :stroke-width="gaugeStrokeWidth" 
@@ -58,6 +59,7 @@
              :stroke-colors="gaugeColors"
              :stroke-bg-colors="gaugeBgColors" ></Gauge>
           <div class="card__items">
+            <button @click="gaugeAnimation">アニメーション</button>
             <p class="m-1">value {{v}}</p>
             <input class="m-1" type="range" :min="minValue" :max="maxValue" step=1 v-model="v"></input>
             <p class="m-1">caution-value {{c}}</p>
@@ -148,6 +150,9 @@ export default {
   methods: {
     donutChartAnimation() {
       this.$refs.donutchart.startAnimate();
+    },
+    gaugeAnimation() {
+      this.$refs.gauge.startAnimate();
     },
     dataBarAnimation() {
       this.$refs.databar.startAnimate();
